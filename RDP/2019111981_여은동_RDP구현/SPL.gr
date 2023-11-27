@@ -1,0 +1,17 @@
+<spl_program>	::=  <block> '.'
+<block>      	::=  'begin' { <dcl> ';' } <st_list> 'end'
+<dcl>        	::=  ('label' | 'integer') <id> {',' <id> }
+
+<st_list>     	::=  <st> {';' <st> }
+<st>         	::=  [ <id> ':' ] <statement>
+<statement>  	::=  <assignment> | <goto_st> | <if_st>
+            	  |  <write_st>   | <block>
+<assignment>	::=  <exp> '=>' <id> { '=>' <id> }
+<goto_st>    	::=  'goto' <id>
+<if_st>       	::=  'if' <condition> 'then' <st_list> ['else' <st_list>] 'fi'
+<write_st>   	::=  'output' '(' <exp> {',' <exp>} ')'
+
+<condition>   	::=  <exp> ('<' | '>' | '=') <exp>
+<exp>       	::=  <term> {('+' | '-') <term>}
+<term>      	::=  <factor> {('*' | '/') <factor>}
+<factor>      	::=  'input' | <id> | <number> | '(' <exp> ')'

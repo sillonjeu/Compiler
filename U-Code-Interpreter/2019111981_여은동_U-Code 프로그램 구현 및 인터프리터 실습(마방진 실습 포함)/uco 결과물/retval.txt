@@ -1,0 +1,56 @@
+
+ line       object           ucode  source program
+
+   1    (35    3    2)     sum        proc           3     2     2
+   2    (38    2    1)                sym            2     1     0
+   3    (38    2    2)                sym            2     2     0
+   4    (38    2    3)                sym            2     3     1
+   5    (19    2    1)                lod            2     1
+   6    (19    2    2)                lod            2     2
+   7    ( 6          )                add       
+   8    (24    2    3)                str            2     3
+   9    (19    2    3)                lod            2     3
+  10    (31          )                retv      
+  11    (30          )                ret       
+  12    (35    1    2)     main       proc           1     2     2
+  13    (38    2    1)                sym            2     1     1
+  14    (23          )                ldp       
+  15    (20   10     )                ldc           10
+  16    (20   20     )                ldc           20
+  17    (29    1     )                call       sum
+  18    (24    2    1)                str            2     1
+  19    (23          )                ldp       
+  20    (19    2    1)                lod            2     1
+  21    (29   -2     )                call       write
+  22    (30          )                ret       
+  23    (37    0     )                bgn            0
+  24    (23          )                ldp       
+  25    (29   12     )                call       main
+  26    (36          )                end       
+
+
+   ****    Result    ****
+
+ 30
+
+
+             ##### Statistics #####
+
+
+    ****  Static Instruction Counts  ****
+
+add    =  1       lod    =  4       ldc    =  2       ldp    =  3       
+str    =  2       call   =  3       ret    =  2       retv   =  1       
+proc   =  2       end    =  1       bgn    =  1       sym    =  4       
+
+
+    ****  Dynamic instruction counts  ****
+
+add    =  1         lod    =  4         ldc    =  2         ldp    =  3         
+str    =  2         call   =  3         ret    =  1         retv   =  1         
+proc   =  2         end    =  1         bgn    =  1         sym    =  4         
+
+
+ Executable instruction count  =   19
+
+ Total execution cycle         =   290
