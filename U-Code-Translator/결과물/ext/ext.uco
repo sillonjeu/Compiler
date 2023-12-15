@@ -1,0 +1,15 @@
+main       proc           1     2     2
+           sym            2     1     1
+           ldp       
+           call       func      
+           ldp       
+           lod            1     1
+           call       write     
+           ret       
+           end       
+func       proc           1     2     2
+           ldc          100
+           bgn            1
+           ldp       
+           call       main      
+           end       
