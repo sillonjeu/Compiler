@@ -4,104 +4,97 @@
 #include <string.h> 
 #include <ctype.h>
 
-#define SIZE 97
-#define LABEL_SIZE 7
+#define SIZE 97 // 심볼 테이블의 크기
+#define LABEL_SIZE 7 // 레이블의 크기
 #define PS_SIZE 100  
 
-int base = 1;
 int offset = 1;
-int width = 1;
-int lvalue, rvalue;
-int levelTable[PS_SIZE];
-int avail = 0;
-int top;
-int stIdx = 0;
+int base = 1;
+int sym_next = 0;
+int level_top = 0;
 
-enum returnType {
-	CONST_TYPE, VAR_TYPE, INT_TYPE, VOID_TYPE, FUNC_TYPE
+enum TYPE {
+	CONST_TYPE, VAR_TYPE, FUNC_TYPE
 };
 
-typedef struct Table {
-	char * symname;
-	int index;
+typedef struct SymbolTalbe {
+	char* name;
+	int typeSpecifier;
+	int typeQualifier;
+	int initialValue;
+	int width;
 	int base;
 	int offset;
-	int width;
-	int typeQualifier;
-	int typeSpecifier;
-	int initialValue;
-} symt;
+} SymbolTable;
 
-void delSymbol(symt *stptr);
-symt symbolTable[SIZE];
+SymbolTable symbolTable[PS_SIZE];
+int levelTable[PS_SIZE];
 
-
-void initSymbolTable()
-{
-	symt * hashTable;
-	hashTable = (symt*)malloc(sizeof(symt)*SIZE);
-	for (int i = 0; i < SIZE; i++)
-	{
-		hashTable[i].index = i;
+void initSymbolTable() {
+	for (int i = 0; i < PS_SIZE; i++) {
+		symbolTable[i].name = NULL;
+		symbolTable[i].typeSpecifier = 0;
+		symbolTable[i].typeQualifier = 0;
+		symbolTable[i].initialValue = 0;
+		symbolTable[i].width = 0;
+		symbolTable[i].base = 0;
+		symbolTable[i].offset = 0;
 	}
+
+	sym_next = 0;
 }
 
-int lookup(char *name)
-{
-	for (int i = avail - 1; i >= 0; i--) {
-		if (strcmp(symbolTable[i].symname, name)==0)
-		{
+
+int lookup(char* name) {
+	for (int i = 0; i < PS_SIZE; i++) {
+		if (strcmp(symbolTable[i].name, name) == 0)
 			return i;
-		}
 	}
 	return -1;
 }
 
-int insert(char *tokenValue, int typeSpecifier, int typeQualifier, int base, int offset, int width, int initialValue)
-{
-	int hashValue = 0, tokenSize;
-	symt *stptr = NULL;
-	stptr = &symbolTable[avail];
 
-	stptr->symname = tokenValue;
-	stptr->base = base;
-	stptr->offset = offset;
-	stptr->width = width;
-	stptr->initialValue = initialValue;
-	stptr->typeSpecifier = typeSpecifier;
-	stptr->typeQualifier = typeQualifier;
+int insert(char* tokenValue, int typeSpecifier, int typeQualifier, int base, int offset, int width, int initialValue) {
+	SymbolTable* ptr = &symbolTable[sym_next];
 
-	avail++;
-	return hashValue;
+	ptr->name = tokenValue;
+	ptr->typeSpecifier = typeSpecifier;
+	ptr->typeQualifier = typeQualifier;
+	ptr->base = base;
+	ptr->offset = offset;
+	ptr->width = width;
+	ptr->initialValue = initialValue;
+
+	return sym_next++;
 }
 
-void set()
-{
-	top++; base++;
-	levelTable[top] = avail;
+void set() {
+	level_top++;
+	base++;
+	levelTable[level_top] = sym_next;
 }
 
-void reset()
-{
-	int start = 0;
-	int end = 0;
-	start = levelTable[top];
-	end = levelTable[top - 1];
-	for (int i = start; i > end; i--) {
-		delSymbol(&symbolTable[i]);
-		avail--;
+void reset() {
+	if (level_top > 0) {
+		int startLevelIndex = levelTable[level_top];
+		int endLevelIndex = levelTable[level_top - 1];
+
+		for (int i = startLevelIndex; i > endLevelIndex; i--) {
+			sym_next--;
+			delSymbol(&symbolTable[i]);
+		}
+
+		level_top--;
+		base--;
 	}
-	top--;
-	base--;
 }
 
-void delSymbol(symt *stptr)
-{
-	stptr->symname = NULL;
-	stptr->base = 0;
-	stptr->offset = 0;
-	stptr->width = 0;
-	stptr->typeQualifier = 0;
-	stptr->typeSpecifier = 0;
-	stptr->initialValue = 0;
+void delSymbol(SymbolTable* ptr) {
+	ptr->name = NULL;
+	ptr->typeSpecifier = 0;
+	ptr->typeQualifier = 0;
+	ptr->initialValue = 0;
+	ptr->width = 0;
+	ptr->base = 0;
+	ptr->offset = 0;
 }

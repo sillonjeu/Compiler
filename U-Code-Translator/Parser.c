@@ -6,11 +6,11 @@
 #define  PS_SIZE    100              /* size of parsing stack */
 
 typedef struct nodeType {
-        struct tokenType token;            // ÅäÅ« Á¾·ù
-        enum {terminal, nonterm} noderep;  // ³ëµåÀÇ Á¾·ù
-        struct nodeType * son;             // ¿ÞÂÊ ¸µÅ©
-        struct nodeType * brother;         // ¿À¸¥ÂÊ ¸µÅ©
-		struct nodeType * father;		   // »óÀ§ ¸µÅ©
+        struct tokenType token;            // ï¿½ï¿½Å« ï¿½ï¿½ï¿½ï¿½
+        enum {terminal, nonterm} noderep;  // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        struct nodeType * son;             // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å©
+        struct nodeType * brother;         // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å©
+		struct nodeType * father;		   // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å©
 } Node;
 
 void semantic(int);
@@ -23,74 +23,75 @@ Node *buildTree(int nodeNumber, int rhsLength);
 int meaningfulToken(struct tokenType token);
 
 enum nodeNumber {
-   ACTUAL_PARAM, ADD,         ADD_ASSIGN,   ARRAY_VAR,   ASSIGN_OP,
-   CALL,         COMPOUND_ST, CONST_NODE,   DCL,         DCL_ITEM,
-   DCL_LIST,     DCL_SPEC,    DIV,          DIV_ASSIGN,  EQ,
-   ERROR_NODE,   EXP_ST,      FORMAL_PARA,  FUNC_DEF,    FUNC_HEAD,
-   GE,           GT,          IDENT,        IF_ELSE_ST,  IF_ST,
-   INDEX,        INT_NODE,    LE,           LOGICAL_AND, LOGICAL_NOT,
-   LOGICAL_OR,   LT,          MOD,          MOD_ASSIGN,  MUL,
-   MUL_ASSIGN,   NE,          NUMBER,       PARAM_DCL,   POST_DEC,
-   POST_INC,     PRE_DEC,     PRE_INC,      PROGRAM,     RETURN_ST,
-   SIMPLE_VAR,   STAT_LIST,   SUB,          SUB_ASSIGN,  UNARY_MINUS,
-   VOID_NODE,    WHILE_ST
+	ERROR_NODE, 
+	ACTUAL_PARAM, ADD, ADD_ASSIGN, ARRAY_VAR, ASSIGN_OP, BREAK_ST, CALL,
+	CASE_ST, COMPOUND_ST, CONDITION_PART, CONST_NODE, CONTINUE_ST, DCL,
+	DCL_ITEM, DCL_LIST, DCL_SPEC, DEFAULT_ST, DIV, DIV_ASSIGN, DO_WHILE_ST,
+	EQ, ERROR, EXP_ST, FORMAL_PARA, FOR_ST, FUNC_DEF, FUNC_HEAD, GE, GT, IDENT,
+	IF_ELSE_ST, IF_ST, INDEX, INIT_PART, INT_TYPE, LE, LOGICAL_AND,
+	LOGICAL_NOT, LOGICAL_OR, LT, MOD_ASSIGN, MUL, MUL_ASSIGN, NE, NUMBER,
+	PARAM_DCL, POST_DEC, POST_INC, POST_PART, PRE_DEC, PRE_INC, PROGRAM,
+	REMAINDER, RETURN_ST, SIMPLE_VAR, STAT_LIST, SUB, SUB_ASSIGN, SWITCH_ST,
+	UNARY_MINUS, VOID_TYPE, WHILE_ST
 };
 
-char *nodeName[] = {
-   "ACTUAL_PARAM", "ADD",         "ADD_ASSIGN",   "ARRAY_VAR",   "ASSIGN_OP",
-   "CALL",         "COMPOUND_ST", "CONST_NODE",   "DCL",         "DCL_ITEM",
-   "DCL_LIST",     "DCL_SPEC",    "DIV",          "DIV_ASSIGN",  "EQ",
-   "ERROR_NODE",   "EXP_ST",      "FORMAL_PARA",  "FUNC_DEF",    "FUNC_HEAD",
-   "GE",           "GT",          "IDENT",        "IF_ELSE_ST",  "IF_ST",
-   "INDEX",        "INT_NODE",    "LE",           "LOGICAL_AND", "LOGICAL_NOT",
-   "LOGICAL_OR",   "LT",          "MOD",          "MOD_ASSIGN",  "MUL",
-   "MUL_ASSIGN",   "NE",          "NUMBER",       "PARAM_DCL",   "POST_DEC",
-   "POST_INC",     "PRE_DEC",     "PRE_INC",      "PROGRAM",     "RETURN_ST",
-   "SIMPLE_VAR",   "STAT_LIST",   "SUB",          "SUB_ASSIGN",  "UNARY_MINUS",
-   "VOID_NODE",    "WHILE_ST"
-};
+char* nodeName[] = {
+   "ERROR_NODE",
+  "ACTUAL_PARAM",  "ADD",  "ADD_ASSIGN",  "ARRAY_VAR",  "ASSIGN_OP",  "BREAK_ST",  "CALL",
+  "CASE_ST",  "COMPOUND_ST",  "CONDITION_PART",  "CONST_NODE",  "CONTINUE_ST",  "DCL",
+  "DCL_ITEM",  "DCL_LIST",  "DCL_SPEC",  "DEFAULT_ST",  "DIV",  "DIV_ASSIGN",  "DO_WHILE_ST",
+  "EQ",  "ERROR",  "EXP_ST",  "FORMAL_PARA",  "FOR_ST",  "FUNC_DEF",  "FUNC_HEAD",  "GE",  "GT",  "IDENT",
+  "IF_ELSE_ST",  "IF_ST",  "INDEX",  "INIT_PART",  "INT_TYPE",  "LE",  "LOGICAL_AND",
+  "LOGICAL_NOT",  "LOGICAL_OR",  "LT",  "MOD_ASSIGN",  "MUL",  "MUL_ASSIGN",  "NE",  "NUMBER",
+  "PARAM_DCL",  "POST_DEC",  "POST_INC",  "POST_PART",  "PRE_DEC",  "PRE_INC",  "PROGRAM",
+  "REMAINDER",  "RETURN_ST",  "SIMPLE_VAR",  "STAT_LIST",  "SUB",  "SUB_ASSIGN",  "SWITCH_ST",
+  "UNARY_MINUS",  "VOID_TYPE",  "WHILE_ST"};
 
 int ruleName[] = {
- /* 0            1            2            3           4           */
-	0,           PROGRAM,     0,           0,          0,
- /* 5            6            7            8           9           */
-	0,           FUNC_DEF,    FUNC_HEAD,   DCL_SPEC,   0,
- /* 10           11           12           13          14          */
-	0,           0,           0,           CONST_NODE, INT_NODE,
- /* 15           16           17           18          19          */
-	VOID_NODE,   0,           FORMAL_PARA, 0,          0,
- /* 20           21           22           23          24          */
-    0,           0,           PARAM_DCL,   COMPOUND_ST,DCL_LIST,
- /* 25           26           27           28          29          */
-    DCL_LIST,    0,           0,           DCL,        0,
- /* 30           31           32           33          34          */
-    0,           DCL_ITEM,    DCL_ITEM,    SIMPLE_VAR, ARRAY_VAR,
- /* 35           36           37           38          39          */
-    0,           0,           STAT_LIST,   0,          0,
- /* 40           41           42           43          44          */
-    0,           0,           0,           0,          0,
- /* 45           46           47           48          49          */
-    0,           EXP_ST,      0,           0,          IF_ST,
- /* 50           51           52           53          54          */
-    IF_ELSE_ST,  WHILE_ST,    RETURN_ST,   0,          0,
- /* 55           56           57           58          59          */
-    ASSIGN_OP,   ADD_ASSIGN,  SUB_ASSIGN,  MUL_ASSIGN, DIV_ASSIGN,
- /* 60           61           62           63          64          */
-    MOD_ASSIGN,  0,           LOGICAL_OR,  0,          LOGICAL_AND,
- /* 65           66           67           68          69          */
-    0,           EQ,          NE,          0,          GT,
- /* 70           71           72           73          74          */
-    LT,          GE,          LE,          0,          ADD,
- /* 75           76           77           78          79          */
-    SUB,         0,           MUL,         DIV,        MOD,
- /* 80           81           82           83          84          */
-    0,           UNARY_MINUS, LOGICAL_NOT, PRE_INC,    PRE_DEC,
- /* 85           86           87           88          89          */
-    0,           INDEX,       CALL,        POST_INC,   POST_DEC,
- /* 90           91           92           93          94          */
-    0,           0,           ACTUAL_PARAM,0,          0,
- /* 95           96           97                                   */
-	0,           0,           0
+	/* 0            1            2            3           4           */
+	   0,           PROGRAM,     0,           0,          0,
+	   /* 5            6            7            8           9           */
+		  0,           FUNC_DEF,    FUNC_HEAD,   DCL_SPEC,   0,
+		  /* 10           11           12           13          14          */
+			 0,           0,           0,           INT_TYPE,
+			 /* 15           16           17           18          19          */
+				VOID_TYPE,   0,           FORMAL_PARA, 0,          0,
+				/* 20           21           22           23          24          */
+				   0,           0,           PARAM_DCL,   COMPOUND_ST, DCL_LIST,
+				   /* 25           26           27           28          29          */
+					  DCL_LIST,    0,           0,           DCL,        0,
+					  /* 30           31           32           33          34          */
+						 0,           DCL_ITEM,    DCL_ITEM,    SIMPLE_VAR, ARRAY_VAR,
+						 /* 35           36           37           38          39          */
+							0,           0,           STAT_LIST,   0,          0,
+							/* 40           41           42           43          44          */
+							   0,           0,           0,           0,          0,
+							   /* 45           46           47           48          49          */
+								  0,           0,      0,           0,          0,
+								  /* 50           51           52           53          54          */
+									 0,			 EXP_ST,		0,			0,          CASE_ST,
+									 /* 55           56           57           58          59          */
+										DEFAULT_ST,   CONTINUE_ST,  BREAK_ST,  IF_ST,	IF_ELSE_ST,
+										/* 60           61           62           63          64          */
+										   WHILE_ST,  DO_WHILE_ST,  SWITCH_ST,	FOR_ST,		INIT_PART,
+										   /* 65           66           67           68          69          */
+										CONDITION_PART,   POST_PART,  RETURN_ST,      0,          0,
+										/* 70           71           72           73          74          */
+										   ASSIGN_OP,          ADD_ASSIGN,          SUB_ASSIGN,          MUL_ASSIGN,DIV_ASSIGN,
+										   /* 75           76           77           78          79          */
+											  MOD_ASSIGN,         0,           LOGICAL_OR,         0,        LOGICAL_AND,
+											  /* 80           81           82           83          84          */
+												 0,           EQ,			 NE,			0,			GT,
+												 /* 85           86           87           88          89          */
+													LT,          GE,			 LE,		0,			ADD,
+													/* 90           91           92           93          94          */
+													   SUB,           0,           MUL		,DIV,	REMAINDER,
+													   /* 95           96           97                                   */
+														  0,			UNARY_MINUS,			LOGICAL_NOT,			PRE_INC,			PRE_DEC, // 99
+														  0,			INDEX,				CALL,					POST_INC,			POST_DEC, // 104
+														  0,			0,						ACTUAL_PARAM,			0,					0,		  // 109
+														  0, 0, 0
+
 };
 
 int sp;                               // stack pointer
